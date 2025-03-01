@@ -1,6 +1,7 @@
+const baseUrl = "https://pokeapi.co/api/v2/pokemon";
 const fetchPokemonData = async (pokemonId) => {
   try {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+    const res = await fetch(`${baseUrl}/${pokemonId}`);
     const data = await res.json();
 
     const name = data.name;
@@ -46,7 +47,7 @@ const fetchPokemonData = async (pokemonId) => {
     while (evoData) {
       const evoName = evoData.species.name;
       const evoImgRes = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${evoName}`
+        `${baseUrl}/${evoName}`
       );
       const evoImgData = await evoImgRes.json();
       const evoImg =

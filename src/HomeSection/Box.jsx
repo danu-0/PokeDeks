@@ -12,7 +12,7 @@ function Box({ setSelectedPokemon, pokemonData }) {
             onClick={() => setSelectedPokemon(pokemon)}
           >
             <img
-              src={pokemon.imageBox}
+              src={pokemon.boxImage}
               alt={pokemon.name}
               className="w-32 h-32"
             />

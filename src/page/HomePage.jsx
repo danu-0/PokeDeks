@@ -5,7 +5,7 @@ import Search from "../HomeSection/Search";
 import BoxDetails from "../HomeSection/BoxDetails";
 import BoxDetailsMobile from "../HomeSection/BoxDetailsMobile";
 import fetchPokemonData from "../data/Pokemon";
-import getStatColor from "../assets/colour.Stat";
+// import getStatColor from "../assets/colour.Stat";
 
 function Home() {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
@@ -15,42 +15,20 @@ function Home() {
   // Fetch Data Pokémon dari API
   useEffect(() => {
     const fetchAllPokemon = async () => {
-      let fetchedPokemon = [];
-      for (let i = 1; i <= 60; i++) { // Ambil 60 Pokémon pertama
-        const pokemon = await fetchPokemonData(i);
-        if (pokemon) {
-          fetchedPokemon.push({
-            id: i,
-            name: pokemon.name,
-            description: pokemon.description,
-            types: pokemon.types,
-            stats: pokemon.stats.map(stat => ({
-              name: stat.name.toUpperCase(),
-              value: stat.value,
-              color: getStatColor(stat.name)
-            })),
-            image: pokemon.image, 
-            imageBox: pokemon.boxImage,
-            evolutionChain: pokemon.evolutionChain,
-          });
-        }
+      try {
+        const promises = Array.from({ length: 60 }, (_, i) => fetchPokemonData(i + 1));
+        const fetchedPokemon = await Promise.all(promises);
+  
+        // Hanya ambil data yang berhasil
+        setPokemonData(fetchedPokemon.filter(pokemon => pokemon !== null));
+      } catch (error) {
+        console.error("Error fetching Pokémon data:", error);
       }
-      setPokemonData(fetchedPokemon);
     };
-
+  
     fetchAllPokemon();
   }, []);
 
-  // Fungsi untuk menentukan warna berdasarkan stat
-  // const getStatColor = (statName) => {
-  //   const colors = {
-  //     hp: "bg-greenE",
-  //     speed: "bg-yellowE",
-  //     attack: "bg-redE",
-  //     defense: "bg-blueE",
-  //   };
-  //   return colors[statName.toLowerCase()] || "bg-red";
-  // };
 
   // Filter berdasarkan pencarian
   const filterSearch = pokemonData.filter((e) =>
